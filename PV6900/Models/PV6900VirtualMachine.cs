@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using PV6900.Services;
 
 namespace PV6900.Models
 {
@@ -23,10 +24,10 @@ namespace PV6900.Models
         public DeviceInfo DeviceInfo { get; }
         public PV6900VirtualMachine(
             IIteInteropService iteInteropService,
-            DeviceInfo deviceInfo)
+            DeviceInfoWrapService deviceInfoWrapService)
         {
             _iteInteropService = iteInteropService;
-            DeviceInfo = deviceInfo;
+            DeviceInfo = deviceInfoWrapService.Get()!;
         }
         public double SettingVolta
         {
