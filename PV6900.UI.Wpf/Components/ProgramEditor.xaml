@@ -1,0 +1,83 @@
+﻿<Grid x:Class="PV6900.UI.Wpf.Components.ProgramEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+            xmlns:it9000uisharedutils="clr-namespace:IT9000.UI.Wpf.Shared.Utils;assembly=IT9000.UI.Wpf.Shared"
+             xmlns:local="clr-namespace:PV6900.UI.Wpf.Components"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" 
+            Background="White"
+             Margin="32 4">
+    <Grid.Resources>
+        <it9000uisharedutils:BoolNegateConverter x:Key="boolNegateConverter"/>
+        <Style x:Key="puProgramEditorButton" TargetType="Button">
+            <Setter Property="Height" Value="32" />
+            <Setter Property="Margin" Value="8 0" />
+            <Setter Property="Padding" Value="12 0" />
+            <Setter Property="pu:ButtonHelper.ButtonStyle" Value="Standard"/>
+            <Setter Property="pu:ButtonHelper.ClickStyle" Value="Sink" />
+        </Style>
+        <ResourceDictionary x:Key="dict">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Panuon.UI.Silver;component/Control.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Grid.Resources>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="4*"/>
+        <RowDefinition Height="2*"/>
+    </Grid.RowDefinitions>
+    <DataGrid Grid.Row="0"
+              ItemsSource="{Binding ManagedProgramSteps}"
+              Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Grid},Path=ActualWidth}"
+              CanUserAddRows="False"
+              HorizontalAlignment="Left"
+              CanUserDeleteRows="False"
+              AutoGenerateColumns="False"
+              CanUserSortColumns="False"
+              IsReadOnly="{Binding InRunning}"
+              Name="DataGrid_ProgramEditor">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Volta" Binding="{Binding Volta}"  Width="1*"/>
+            <DataGridTextColumn Header="Ampere" Binding="{Binding Ampere}"  Width="1*"/>
+            <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" Width="1*"/>
+            <DataGridTemplateColumn Header="Inner loop type" Width="1*">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <ComboBox Height="26" SelectedValue="{Binding InnerLoopFlag,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+        </DataGrid.Columns>
+    </DataGrid>
+
+    <StackPanel Orientation="Horizontal" Margin="0,32,0,0" Grid.Row="1">
+        <Button Command="{Binding AddCommand}" 
+                Style="{StaticResource puProgramEditorButton}"
+                Content="Add"
+                IsEnabled="{Binding InRunning,Converter={StaticResource boolNegateConverter}}"/>
+        <Button Command="{Binding DeleteCommand}"
+                Style="{StaticResource puProgramEditorButton}"
+                Content="Delete"
+                CommandParameter="{Binding ElementName=DataGrid_ProgramEditor}"
+                IsEnabled="{Binding InRunning,Converter={StaticResource boolNegateConverter}}"/>
+        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+            <Label Content="Outer loop count:" />
+            <TextBox  MinWidth="32" Text="{Binding OuterLoopCount,UpdateSourceTrigger=PropertyChanged}" 
+                      Padding="2 4"
+                      VerticalAlignment="Center"/>
+        </StackPanel>
+        <Button Command="{Binding StartProgramCommand}" 
+                Style="{StaticResource puProgramEditorButton}"
+                Content="Start"
+                CommandParameter="{Binding ElementName=DataGrid_ProgramEditor}"
+                IsEnabled="{Binding InRunning,Converter={StaticResource boolNegateConverter}}"/>
+        <Button Command="{Binding StopProgramCommand}" 
+                Style="{StaticResource puProgramEditorButton}"
+                Content="Stop"
+                IsEnabled="{Binding InRunning}"
+                />
+    </StackPanel>
+</Grid>

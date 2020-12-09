@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+	<Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Panuon.UI.Silver" Version="1.1.3" />
+    <PackageReference Include="Prism.Wpf" Version="8.0.0.1909" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IT9000.UI.Wpf.Shared\IT9000.UI.Wpf.Shared.csproj" />
+    <ProjectReference Include="..\PV6900\PV6900.csproj" />
+  </ItemGroup>
+
+</Project>

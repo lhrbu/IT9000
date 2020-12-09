@@ -1,0 +1,15 @@
+﻿<Window x:Class="IT9000.UI.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pv6900Comp="clr-namespace:PV6900.UI.Wpf.Components;assembly=PV6900.UI.Wpf"
+        xmlns:pv6900="clr-namespace:PV6900.UI.Wpf;assembly=PV6900.UI.Wpf"
+        xmlns:local="clr-namespace:IT9000.UI.Wpf"
+        mc:Ignorable="d"
+        Background="#fbfbfb"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <pv6900:PV6900UIElement />
+    </Grid>
+</Window>

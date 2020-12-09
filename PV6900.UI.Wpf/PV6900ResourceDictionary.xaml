@@ -1,0 +1,30 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:PV6900.UI.Wpf"
+                    xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver">
+    <Style TargetType="Label">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Label">
+                    <Border Padding="{TemplateBinding Padding}">
+                        <ContentPresenter RecognizesAccessKey="False"></ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="puProgramEditorButton" TargetType="Button">
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Margin" Value="8 0" />
+        <Setter Property="Padding" Value="12 0" />
+        <!--<Setter Property="Foreground" Value="White" />-->
+        <Setter Property="pu:ButtonHelper.ButtonStyle" Value="Standard"/>
+        <Setter Property="pu:ButtonHelper.ClickStyle" Value="Sink" />
+        <Setter Property="pu:ButtonHelper.CornerRadius" Value="8" />
+    </Style>
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/Panuon.UI.Silver;component/Control.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

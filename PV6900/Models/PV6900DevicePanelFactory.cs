@@ -19,7 +19,12 @@ namespace PV6900.Models
         public IServiceProvider ServiceProvider {get;private set;} = null!;
         private void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<PV6900VirtualMachine>();
+            services.AddScoped<ManagedProgramInterpreter>();
+            services.AddScoped<PV6900DevicePanel>();
+            services.AddScoped<DeviceInfoBoxService>();
 
+            services.AddTransient<IIteInteropService, MockIterInteropService>();
         }
 
         public void Initialize()
@@ -28,12 +33,12 @@ namespace PV6900.Models
             ServiceProvider = _serivces.BuildServiceProvider();
         }
 
-        IDevicePanel CreateDevicePanel(DeviceInfo deviceInfo)
+        public IDevicePanel CreateDevicePanel(DeviceInfo deviceInfo)
         {
             IServiceScope serviceScope = ServiceProvider.CreateScope();
-            DeviceInfoWrapService deviceInfoWrapService = 
-                serviceScope.ServiceProvider.GetRequiredService<DeviceInfoWrapService>();
-            deviceInfoWrapService.Set(deviceInfo);
+            DeviceInfoBoxService deviceInfoWrapService = 
+                serviceScope.ServiceProvider.GetRequiredService<DeviceInfoBoxService>();
+            deviceInfoWrapService.Box(deviceInfo);
             PV6900DevicePanel devicePanel = serviceScope.ServiceProvider
                 .GetRequiredService<PV6900DevicePanel>();
             devicePanel.ServiceScope = serviceScope;

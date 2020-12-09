@@ -10,11 +10,21 @@ namespace PV6900.Models
 {
     public class ManagedProgramInterpreter
     {
-        
+        private readonly PV6900VirtualMachine _machine;
+        private readonly Stopwatch _programRunnintTimeStopWatch = Stopwatch.StartNew();
+        public bool InRunning { get; private set; }
+        public int SettingOutLoopCount { get; private set; }
+        public int SettingInnerLoopCount { get; private set; }
+        public int CurrentOutLoopCount { get; private set; }
+        public int CurrentInnerLoopCount { get; private set; }
+        public TimeSpan CurrentStepSettingTime { get; private set; }
+        public TimeSpan ProgramRunningTime => _programRunnintTimeStopWatch.Elapsed;
+
+        public ManagedProgramStep? CurrentManagedProgramStep { get; private set; }
         public ManagedProgramInterpreter(PV6900VirtualMachine machine)
         { _machine = machine; }
 
-        public async Task ExecuteAsync(ManagedProgram managedProgram)
+        public async Task ExecuteManagedProgramAsync(ManagedProgram managedProgram)
         {
             InRunning = true;
             SettingOutLoopCount = managedProgram.OuterLoopCount;
@@ -30,27 +40,17 @@ namespace PV6900.Models
             _programRunnintTimeStopWatch.Stop();
             InRunning = false;
         }
-        public  bool  InRunning { get; private set; }
-        public int SettingOutLoopCount { get; private set; }
-        public int SettingInnerLoopCount { get; private set; }
-        public int CurrentOutLoopCount { get; private set; }
-        public int CurrentInnerLoopCount { get; private set; }
-        public TimeSpan ProgramRunningTime => _programRunnintTimeStopWatch.Elapsed;
-        public ManagedProgramStep? CurrentManagedProgramStep { get; private set; }
-        
-
-        private readonly PV6900VirtualMachine _machine;
-        private Stopwatch _programRunnintTimeStopWatch =  Stopwatch.StartNew();
         private async Task ExecuterManagedProgramStepsAsync(IEnumerable<ManagedProgramStep> managedProgramSteps)
         {
             List<ManagedProgramStep> innerLoopStepsBuffer = new();
             bool intoInnerLoop = false;
-            foreach(ManagedProgramStep managedProgramStep in managedProgramSteps)
+            foreach (ManagedProgramStep managedProgramStep in managedProgramSteps)
             {
-                switch(managedProgramStep.InnerLoopFlag)
+                CurrentStepSettingTime = TimeSpan.FromSeconds(managedProgramStep.Duration);
+                switch (managedProgramStep.InnerLoopFlag)
                 {
                     case InnerLoopFlag.None:
-                        if (!intoInnerLoop) { await _machine.ExecuteAsync(GetSettings(managedProgramStep)); }
+                        if (!intoInnerLoop) { await _machine.ExecuteProgramStepAsync(GetProgramStep(managedProgramStep)); }
                         else { innerLoopStepsBuffer.Add(managedProgramStep); }
                         break;
                     case InnerLoopFlag.On:
@@ -61,13 +61,13 @@ namespace PV6900.Models
                         innerLoopStepsBuffer.Add(managedProgramStep);
                         int innerLoopCount = innerLoopStepsBuffer.First().InnerLoopCount;
                         SettingInnerLoopCount = innerLoopCount;
-                        foreach(int index in Enumerable.Range(0,innerLoopCount))
+                        foreach (int index in Enumerable.Range(0, innerLoopCount))
                         {
                             CurrentInnerLoopCount = index + 1;
-                            foreach(ManagedProgramStep step in innerLoopStepsBuffer)
+                            foreach (ManagedProgramStep step in innerLoopStepsBuffer)
                             {
                                 CurrentManagedProgramStep = step;
-                                await _machine.ExecuteAsync(GetSettings(step));
+                                await _machine.ExecuteProgramStepAsync(GetProgramStep(step));
                             }
                         }
                         innerLoopStepsBuffer.Clear();
@@ -76,8 +76,15 @@ namespace PV6900.Models
                 }
             }
         }
-        private ProgramStep GetSettings(ManagedProgramStep managedProgramStep) =>
-            new ProgramStep { Volta = managedProgramStep.Volta, 
-                Ampere = managedProgramStep.Ampere, Duration = managedProgramStep.Duration };
+        private ProgramStep GetProgramStep(ManagedProgramStep managedProgramStep) =>
+            new ProgramStep
+            {
+                Volta = managedProgramStep.Volta,
+                Ampere = managedProgramStep.Ampere,
+                Duration = managedProgramStep.Duration
+            };
+
+
+
     }
 }

@@ -19,11 +19,11 @@ namespace PV6900.Models
         private readonly ManagedProgramInterpreter _interpreter;
         public PV6900DevicePanel(
             IIteInteropService iteInteropService,
-            DeviceInfoWrapService deviceInfoWrapService,
+            DeviceInfoBoxService deviceInfoBoxService,
             ManagedProgramInterpreter interpreter)
         {
             _iteInteropService = iteInteropService;
-            _deviceInfo = deviceInfoWrapService.Get()!;
+            _deviceInfo = deviceInfoBoxService.Unbox()!;
             _interpreter = interpreter;
         }
 
@@ -43,12 +43,12 @@ namespace PV6900.Models
             _iteInteropService.ItePow_SetOutputState(_deviceInfo.Address, "0");
             _iteInteropService.WaitHandle.Set();
         }
-        public void Start()=>_interpreter.ExecuteAsync(ManagedProgram).ConfigureAwait(false);
+        public void Start()=>_interpreter.ExecuteManagedProgramAsync(ManagedProgram).ConfigureAwait(false);
         public void Stop()=>_interpreter.Stop();
         public bool CanStart() => !_interpreter.InRunning;
         public bool CanStop() => _interpreter.InRunning;
-        
-        public IServiceScope ServiceScope {get;set;}
+
+        public IServiceScope ServiceScope { get; set; } = null!;
         public void Dispose()
         {
             ServiceScope.Dispose();

@@ -24,10 +24,10 @@ namespace PV6900.Models
         public DeviceInfo DeviceInfo { get; }
         public PV6900VirtualMachine(
             IIteInteropService iteInteropService,
-            DeviceInfoWrapService deviceInfoWrapService)
+            DeviceInfoBoxService deviceInfoWrapService)
         {
             _iteInteropService = iteInteropService;
-            DeviceInfo = deviceInfoWrapService.Get()!;
+            DeviceInfo = deviceInfoWrapService.Unbox()!;
         }
         public double SettingVolta
         {
@@ -78,36 +78,35 @@ namespace PV6900.Models
             }
         }
         public TimeSpan CurrentStepRunningTime => _stepRunningTimeStopwatch.Elapsed;
-        
 
-
-        public async ValueTask ExecuteAsync(ProgramStep instruct)
+        public async ValueTask ExecuteProgramStepAsync(ProgramStep programStep)
         {
+            CancellationTokenSource localTokenSource = _cancellationTokenSource;
             _stepRunningTimeStopwatch.Restart();
-            ExecuteInternal(instruct);
-            long durationMilliseconds = (long)instruct.Duration * 1000;
+            ExecuteProgramStepInternal(programStep);
+            long durationMilliseconds = (long)programStep.Duration * 1000;
             long timeEnd = _stepRunningTimeStopwatch.ElapsedMilliseconds;
             int waitTime = (int)(durationMilliseconds - timeEnd);
             if (waitTime > 0)
-            { await Task.Delay(waitTime, _cancellationTokenSource.Token);}
+            { await Task.Delay(waitTime, localTokenSource.Token);}
         }
         public void Stop()
         {
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource.Token.WaitHandle.WaitOne();
             _stepRunningTimeStopwatch.Stop();
-            ExecuteInternal(new ProgramStep{ Ampere = 0, Volta = 0, Duration = 0 });
+            ExecuteProgramStepInternal(new ProgramStep{ Ampere = 0, Volta = 0, Duration = 0 });
             _cancellationTokenSource = new();
         }
 
-        private void ExecuteInternal(ProgramStep instruct)
+        private void ExecuteProgramStepInternal(ProgramStep programStep)
         {
             _iteInteropService.WaitHandle.WaitOne();
-            int errNo = _iteInteropService.IteDC_WriteCmd(DeviceInfo.Address, $"VOLT {instruct.Volta}");
-            errNo = _iteInteropService.IteDC_WriteCmd(DeviceInfo.Address, $"CURR {instruct.Ampere}");
+            int errNo = _iteInteropService.IteDC_WriteCmd(DeviceInfo.Address, $"VOLT {programStep.Volta}");
+            errNo = _iteInteropService.IteDC_WriteCmd(DeviceInfo.Address, $"CURR {programStep.Ampere}");
             _iteInteropService.WaitHandle.Set();
         }
         private Stopwatch _stepRunningTimeStopwatch = Stopwatch.StartNew();
-        private CancellationTokenSource _cancellationTokenSource=null!;
+        private CancellationTokenSource _cancellationTokenSource=new();
     }
 }
