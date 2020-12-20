@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace PV6900.Models
 {
-    public class PV6900DevicePanelFactory
+    public class PV6900DevicePanelFactory: IDevicePanelFactory
     {
         private readonly IServiceCollection _serivces = new ServiceCollection();
         public IServiceProvider ServiceProvider {get;private set;} = null!;
