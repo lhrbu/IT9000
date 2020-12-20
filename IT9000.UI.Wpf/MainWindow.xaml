@@ -3,13 +3,87 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:pv6900Comp="clr-namespace:PV6900.UI.Wpf.Components;assembly=PV6900.UI.Wpf"
-        xmlns:pv6900="clr-namespace:PV6900.UI.Wpf;assembly=PV6900.UI.Wpf"
         xmlns:local="clr-namespace:IT9000.UI.Wpf"
         mc:Ignorable="d"
-        Background="#fbfbfb"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        xmlns:controls="clr-namespace:IT9000.UI.Wpf.Controls"
+        xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+        Name="Window_MainWindow"
+        FontFamily="{StaticResource FontAwesome}"
+        Background="#fefefe"
+        >
     <Grid>
-        <pv6900:PV6900UIElement />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*" />
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="100*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal"
+                    Margin="0">
+            <Button Style="{StaticResource puMenuButton}" Background="Green"
+                    pu:ButtonHelper.HoverBrush="#185F18"
+                    Content="Connect"
+                    Command="{Binding ShowConnectWindowCommand}"/>
+            <Button Style="{StaticResource puMenuButton}" Background="Red"
+                    pu:ButtonHelper.HoverBrush="IndianRed"
+                    Content="Disconnect"
+                    Command="{Binding ShowDisconnectWindowCommand}"/>
+            <Button Style="{StaticResource puMenuButton}" Background="Gray"
+                    pu:ButtonHelper.HoverBrush="#424242"
+                    Content="Multi Devices"
+                    Command="{Binding ShowMultiDevicesPanelWindowCommand}"/>
+        </StackPanel>
+        <Line Stretch="Fill" Stroke="LightGray" X2="1"
+              Grid.Row="1"/>
+
+        <TabControl  Grid.Row="2" Margin="8,8,8,0" x:Name="TabControl_DevicePanels"
+                     pu:TabControlHelper.TabControlStyle="Classic"
+                     pu:TabControlHelper.ItemPadding="8"
+                     pu:TabControlHelper.ItemHeight="30">
+            <TabItem Header="Offline Devices">
+                <ListView ItemsSource="{Binding OfflineDevices}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <controls:DevicePanel 
+                                    HeaderIconBrush="Red"
+                                    Width="200"
+                                    DeviceName="{Binding Name}"
+                                    DeviceModel="{Binding Model}"
+                                    DeviceAddress="{Binding Address}"
+                                    PortType="{Binding InterfaceType}"
+                                    />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel HorizontalAlignment="Center"
+                                Width="{Binding RelativeSource={RelativeSource AncestorType=TabControl},Path=ActualWidth}"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+            </TabItem>
+            <TabItem Header="Online Devices">
+                <ListView ItemsSource="{Binding OnlineDevices}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <controls:DevicePanel
+                                    HeaderIconBrush="Green"
+                                    Width="200"
+                                    DeviceName="{Binding Name}"
+                                    DeviceModel="{Binding Model}"
+                                    DeviceAddress="{Binding Address}"
+                                    PortType="{Binding InterfaceType}"
+                                    />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel HorizontalAlignment="Center"
+                                Width="{Binding RelativeSource={RelativeSource AncestorType=TabControl},Path=ActualWidth}"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

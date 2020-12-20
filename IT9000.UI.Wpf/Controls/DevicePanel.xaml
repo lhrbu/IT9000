@@ -1,0 +1,52 @@
+﻿<Grid x:Class="IT9000.UI.Wpf.Controls.DevicePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IT9000.UI.Wpf.Controls"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="160"
+            
+             Name="Grid_DevicePanel"
+             Margin="10px 20px"
+             Background="#fcfcfc"
+             >
+    <Grid.Effect>
+        <DropShadowEffect ShadowDepth="-4" BlurRadius="8" Color="LightGray"/>
+    </Grid.Effect>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="1*"/>
+        <RowDefinition Height="4*"/>
+    </Grid.RowDefinitions>
+
+
+    <StackPanel  Grid.Row="0" Margin="15 10">
+        <StackPanel Orientation="Horizontal">
+            <Label Foreground="Black" Margin="0 0 48 0"
+               Content="{Binding ElementName=Grid_DevicePanel,Path=DeviceName}"/>
+            <iconPacks:PackIconMaterialDesign Kind="RssFeed" Width="13"  Height="13"
+               Foreground="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:DevicePanel},Path=HeaderIconBrush}" 
+                                              VerticalAlignment="Center"/>
+        </StackPanel>
+        <Line Stretch="Fill" Stroke="LightGray" Margin="2" X2="1" />
+    </StackPanel>
+    <StackPanel Grid.Row="1" Margin="10 5">
+        <StackPanel HorizontalAlignment="Left" Margin="4"
+                        Orientation="Horizontal">
+            <Label Content="Model:"/>
+            <Label Content ="{Binding ElementName=Grid_DevicePanel,Path=DeviceModel}"/>
+        </StackPanel>
+
+        <StackPanel HorizontalAlignment="Left" Margin="4"
+                        Orientation="Horizontal">
+            <Label Content="Address:"/>
+            <Label Content="{Binding ElementName=Grid_DevicePanel,Path=DeviceAddress}"/>
+        </StackPanel>
+
+        <StackPanel HorizontalAlignment="Left" Margin="4"
+                        Orientation="Horizontal">
+            <Label Content="Port Type:"/>
+            <Label Content="{Binding ElementName=Grid_DevicePanel,Path=PortType}"/>
+        </StackPanel>
+    </StackPanel>
+</Grid>

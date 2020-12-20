@@ -33,7 +33,7 @@ namespace PV6900.UI.Wpf.ViewModels
         public DelegateCommand<DataGrid> DeleteCommand { get; }
         public DelegateCommand<DataGrid> StartProgramCommand { get; }
         public DelegateCommand StopProgramCommand { get; }
-        public ObservableCollection<ManagedProgramStep> ManagedProgramSteps { get; } = new() { new() };
+        public ObservableCollection<ManagedProgramStep> ManagedProgramSteps { get; } = new() { new ManagedProgramStep() };
         public int OuterLoopCount { get => _outerLoopCount; set => SetProperty(ref _outerLoopCount, value); }
         private int _outerLoopCount = 1;
 
