@@ -15,5 +15,6 @@ namespace IT9000.Shared.Models
         void Stop();
         bool CanStart();
         bool CanStop();
+        object CreateUI();
     }
 }

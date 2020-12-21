@@ -26,5 +26,6 @@ namespace PV6900.UI.Wpf.Components
             InitializeComponent();
             //DataContext = monitorGaugesGroupVM;
         }
+        
     }
 }

@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IT9000.Shared\IT9000.Shared.csproj" />
-    <ProjectReference Include="..\PV6900.UI.Wpf\PV6900.UI.Wpf.csproj" />
   </ItemGroup>
 
 </Project>

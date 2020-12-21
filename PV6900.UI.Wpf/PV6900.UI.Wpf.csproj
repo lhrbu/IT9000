@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Panuon.UI.Silver" Version="1.1.3" />
     <PackageReference Include="Prism.Wpf" Version="8.0.0.1909" />
+	<PackageReference Include="LiveCharts.Wpf.NetCore3" Version="0.9.7" />
   </ItemGroup>
 
   <ItemGroup>

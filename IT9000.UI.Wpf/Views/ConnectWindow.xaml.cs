@@ -11,20 +11,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IT9000.UI.Wpf
+namespace IT9000.UI.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// ConnectWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ConnectWindow : Window
     {
-        public MainWindow(MainWindowVM mainWindowVM)
+        public ConnectWindow(ConnectWindowVM connectWindowVM)
         {
             InitializeComponent();
-            DataContext = mainWindowVM;
+            DataContext = connectWindowVM;
         }
     }
 }

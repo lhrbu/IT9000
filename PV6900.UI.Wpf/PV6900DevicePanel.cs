@@ -9,10 +9,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using PV6900.Services;
 using Microsoft.Extensions.DependencyInjection;
+using PV6900.Models;
 
-namespace PV6900.Models
+namespace PV6900.UI.Wpf
 {
-    public class PV6900DevicePanel : IDevicePanel,IDisposable
+    public class PV6900DevicePanel : IDevicePanel, IDisposable
     {
         private readonly IIteInteropService _iteInteropService;
         private readonly DeviceInfo _deviceInfo;
@@ -43,8 +44,8 @@ namespace PV6900.Models
             _iteInteropService.ItePow_SetOutputState(_deviceInfo.Address, "0");
             _iteInteropService.WaitHandle.Set();
         }
-        public void Start()=>_interpreter.ExecuteManagedProgramAsync(ManagedProgram).ConfigureAwait(false);
-        public void Stop()=>_interpreter.Stop();
+        public void Start() => _interpreter.ExecuteManagedProgramAsync(ManagedProgram).ConfigureAwait(false);
+        public void Stop() => _interpreter.Stop();
         public bool CanStart() => !_interpreter.InRunning;
         public bool CanStop() => _interpreter.InRunning;
 
@@ -54,5 +55,8 @@ namespace PV6900.Models
             ServiceScope.Dispose();
             GC.SuppressFinalize(this);
         }
+
+        public object CreateUI() => ServiceScope.ServiceProvider
+            .GetRequiredService<PV6900UIElement>();
     }
 }

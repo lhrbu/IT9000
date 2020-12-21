@@ -17,9 +17,9 @@ namespace PV6900.UI.Wpf.ViewModels
     public class ProgramEditorVM:BindableBase
     {
         private readonly ManagedProgramInterpreter _interpreter;
-        private readonly MonitorGaugesGroupVM _monitorGaugesGroupVM;
+        private readonly MonitorControllerVM _monitorGaugesGroupVM;
         public ProgramEditorVM(ManagedProgramInterpreter interpreter,
-            MonitorGaugesGroupVM monitorGaugesGroupVM)
+            MonitorControllerVM monitorGaugesGroupVM)
         { 
             _interpreter = interpreter;
             _monitorGaugesGroupVM = monitorGaugesGroupVM;

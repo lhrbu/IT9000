@@ -1,0 +1,42 @@
+﻿<Window x:Class="IT9000.UI.Wpf.Views.ConnectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IT9000.UI.Wpf.Views"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        mc:Ignorable="d"
+        Title="Offline Device List" Height="400" Width="300">
+    <StackPanel>
+        <ListBox ItemsSource="{Binding OfflineDevices}" x:Name="ListBox_Devices"
+                 SelectionMode="Multiple" Margin="8 16 8 0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="8 4">
+                        <iconPacks:PackIconMaterialDesign Kind="Layers" Width="13"  Height="13" Margin="0 0 8 0"
+                                                          Foreground="CornflowerBlue"
+                                                          VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Info.Name}"></TextBlock>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="96px,0,48px,0">
+                            <iconPacks:PackIconMaterialDesign Kind="RssFeed" Width="13"  Height="13"
+                                                Foreground="Red"
+                                              VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel Orientation="Horizontal" Margin="12px,24px,0,0" 
+                    Visibility="{Binding OfflineDevicesEmptyFlag}">
+            <Button Style="{StaticResource puMenuButton}" Content="Reset"
+                    Background="Red"
+                    Command="{Binding ResetSelectionsCommand}"
+                    CommandParameter="{Binding ElementName=ListBox_Devices}"
+                    />
+            <Button Style="{StaticResource puMenuButton}" Content="Connect" 
+                    Background="Green"
+                    Command="{Binding ConnectSelectionsCommand}"
+                    CommandParameter="{Binding ElementName=ListBox_Devices}"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

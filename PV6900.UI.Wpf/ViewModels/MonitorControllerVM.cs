@@ -10,18 +10,22 @@ using Prism.Commands;
 
 namespace PV6900.UI.Wpf.ViewModels
 {
-    public class MonitorGaugesGroupVM:BindableBase
+    public class MonitorControllerVM:BindableBase
     {
         private readonly PV6900VirtualMachine _machine;
-        public MonitorGaugesGroupVM(
-            PV6900VirtualMachine machine)
+        private readonly TimeSpanVoltaChartVM _timeSpanVoltaChartVM;
+        private readonly TimeSpanAmpereChartVM _timeSpanAmpereChartVM;
+        public MonitorControllerVM(
+            PV6900VirtualMachine machine,
+            TimeSpanVoltaChartVM timeSpanVoltaChartVM,
+            TimeSpanAmpereChartVM timeSpanAmpereChartVM)
         { 
             _machine = machine;
-            StartMonitorCommand = new(() => StartMonitorAsync().ConfigureAwait(false));
-            StopMonitorCommand = new(StopMonitor);
+            _timeSpanVoltaChartVM = timeSpanVoltaChartVM;
+            _timeSpanAmpereChartVM = timeSpanAmpereChartVM;
         }
-        public DelegateCommand StartMonitorCommand { get; }
-        public DelegateCommand StopMonitorCommand { get; }
+        public DelegateCommand StartMonitorCommand => new(() => StartMonitorAsync().ConfigureAwait(false));
+        public DelegateCommand StopMonitorCommand => new(StopMonitor);
         private int _interval = 100;
         private async Task StartMonitorAsync()
         {
@@ -33,6 +37,8 @@ namespace PV6900.UI.Wpf.ViewModels
                 Ampere = _machine.Ampere;
                 SettingVolta = _machine.SettingVolta;
                 SettingAmpere = _machine.SettingAmpere;
+                _timeSpanVoltaChartVM.FetchPoint(Volta);
+                _timeSpanAmpereChartVM.FetchPoint(Ampere);
                 await Task.Delay(_interval, localTokenSource.Token);
             }
         }
